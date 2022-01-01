@@ -1,7 +1,11 @@
 const file = require('./file');
 const path = require('path');
 const express = require('express');
+const bp = require('body-parser');
 var app = express();
+var jsonParser = bp.json();
+var urlParser = bp.urlencoded({extended: false});
+
 
 function readFile(mf){
     let risp = "";
@@ -25,6 +29,12 @@ app.get("/css/main.min.css",(req,res) => {
 
 app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
+});
+
+//Lettura contenuto del percorso
+app.post('/readdir',urlParser,(req,res) => {
+    console.log(req.body);
+    res.send(req.body);
 });
 
 var port = process.env.PORT || 3000;
