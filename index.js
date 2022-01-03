@@ -34,8 +34,12 @@ app.get("/js/home.js",(req,res) => {
 
 //Lettura contenuto del percorso
 app.post('/readdir',urlParser,(req,res) => {
-    console.log(req.body);
-    res.send(req.body);
+    //console.log(req.body);
+    //res.send(req.body);
+    var path = req.body.path;
+    let folder = new dir.Dir(path);
+    let names = folder.readDir();
+    res.send(names);
 });
 
 var port = process.env.PORT || 3000;
