@@ -5,37 +5,41 @@ class MyFile{
     static FILE_NOTEXISTS = 1;
     static FILE_READERROR = 2;
 
-    percorso;
-    errore;
+    path;
+    error;
 
     constructor(path){
-        this.percorso = path;
-        this.errore = 0;
+        this.path = path;
+        this.error = 0;
     }
 
     //se il file specificato esiste
     esiste(){
         var esiste = false;
-        if(fs.existsSync(this.percorso)){
+        if(fs.existsSync(this.path)){
             esiste = true;
         }
         return esiste;
     }
 
-    getErrore(){
-        return this.errore;
+    getError(){
+        return this.error;
+    }
+
+    getPath(){
+        return this.percorso;
     }
 
     //lettura di un file
     readFile(){
         let fileContent = null;
-        this.errore = 0;
+        this.error = 0;
         if(this.esiste()){
             fileContent = fs.readFileSync(this.percorso, 'utf-8');
 
         }//if(this.esiste()){
         else{
-            this.errore = MyFile.FILE_NOTEXISTS;
+            this.error = MyFile.FILE_NOTEXISTS;
         }
         return fileContent;
     }

@@ -1,4 +1,5 @@
 const file = require('./file');
+const dir = require('./dir');
 const path = require('path');
 const express = require('express');
 const bp = require('body-parser');
