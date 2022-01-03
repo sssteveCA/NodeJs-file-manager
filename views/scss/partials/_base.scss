@@ -2,3 +2,11 @@
 input#path{
     margin-right: $marginR;
 }
+
+div#pathString{
+    @include path();
+}
+
+th, td{
+    @include tableCell();
+}

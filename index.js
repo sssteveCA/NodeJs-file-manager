@@ -42,6 +42,7 @@ app.post('/readdir',(req,res) => {
     var path = req.body.path;
     let folder = new dir.Dir(path);
     let names = folder.readDir();
+    names['path'] = folder.getPath();
     names['error'] = folder.getError();
     res.json(names);
 });

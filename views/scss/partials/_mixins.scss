@@ -1,0 +1,14 @@
+
+//div#pathString
+
+@mixin path(){
+    padding: $path_padding;
+    font-size: $path_fontSize;
+    font-style: $path_fontStyle;
+}
+
+//td, th of table
+@mixin tableCell() {
+    border: $cell_border;
+    padding: $cell_padding;
+}
