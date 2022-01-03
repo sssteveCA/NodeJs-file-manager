@@ -31,16 +31,53 @@ app.get("/css/main.min.css",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/css/main.min.css'));
 });
 
+app.get("/js/jQuery.js",(req,res) => {
+    res.sendFile(path.resolve(__dirname,'node_modules/jquery/dist/jquery.min.js'));
+});
+
+app.get("/css/jQueryUI.css",(req,res) => {
+    res.sendFile(path.resolve(__dirname,'node_modules/jquery-ui-dist/jquery-ui.min.css'));
+});
+
+app.get("/js/jQueryUI.js",(req,res) => {
+    res.sendFile(path.resolve(__dirname,'node_modules/jquery-ui-dist/jquery-ui.min.js'));
+});
+
 app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
 });
 
-//Lettura contenuto del percorso
+app.post('/deldir',(req,res) => {
+
+});
+
+app.post('/delfile',(req,res) => {
+    console.log(req.body);
+});
+
+//read a file
+app.get('/readfile',(req,res) => {
+    console.log(req.query.path);
+    var path = req.query.path;
+    let fd = new file.MyFile(path);
+    let content = fd.readFile();
+    let errno = fd.getError();
+    let risp = "";
+    if(errno == 0)
+        risp = content;
+    else if(errno == file.MyFile.FILE_NOTEXISTS)
+        risp = "Il file che stai cercando non esiste";
+    else if(errno == file.MyFile.FILE_NOTAFILE)
+        risp = "Il percorso specificato non appartiene ad un file";
+    res.send(risp);
+});
+
+//Read a directory
 app.post('/readdir',(req,res) => {
     //console.log(req.body);
     //res.send(req.body);
     var path = req.body.path;
-    let folder = new dir.Dir(path);
+    let folder = new dir.MyDir(path);
     let names = folder.readDir();
     names['path'] = folder.getPath();
     names['error'] = folder.getError();

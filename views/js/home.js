@@ -1,9 +1,9 @@
 
 //Call to Node server to use file functions
-function fAjax(url, dati){
+function fAjax(url, method, dati){
     $.ajax({
         url: url,
-        method: 'POST',
+        method: method,
         data : dati,
         contentType : 'application/x-www-form-urlencoded',
         success : function(risp, stato, xhr){
@@ -15,6 +15,9 @@ function fAjax(url, dati){
                 else{
                     alert("Errore durante la lettura della cartella. Codice "+risp['error']);
                 }
+            }//if(url == '/readdir'){
+            else if(url == '/readfile'){
+
             }
         },
         complete : function(xhr, stato){
@@ -26,8 +29,56 @@ function fAjax(url, dati){
     });
 }
 
+//add events to the buttons created with the table
+function addEvent(){
+    $('.open').on('click',function(){
+        var tr = $(this).closest('tr');
+        var path = tr.find('.fullpath').val();
+        window.open('/readfile?path='+path, '_blank').focus();
+    });
+    $('.delete').on('click',function(){
+        var tr = $(this).closest('tr');
+        var path = tr.find('.fullpath').val();
+        console.log(path);
+        dati = {};
+        dati['path'] = path;
+        dati['title'] = 'Elimina file';
+        fDialog(dati);
+    });
+}
+
+//Dialog used in most of file operations
+function fDialog(dati){
+    $('<dialog id="dialog">').dialog({
+        draggable : false,
+        resizable : false,
+        modal : true,
+        title : dati['title'],
+        buttons : [
+            {
+                text: "Sì",
+                click : function(){
+                    $(this).dialog("close");
+                }
+            },
+            {
+                text: "No",
+                click : function(){
+                    $(this).dialog("close");
+                }
+            }
+        ],
+        open : function(){
+            $(this).html('Vuoi eliminare il file selezionato? ');
+        },
+        close : function(){
+            $(this).dialog("destroy");
+        }
+    });
+}
+
 function tab(files){
-    var table,tr,th,td,button;
+    var table,tr,th,td,button,input;
     $('#pathString').html(files['path']);
     $('#tabFiles').html('');
     table = $('<table>');
@@ -74,9 +125,17 @@ function tab(files){
                 button.text("ELIMINA");
             td.append(button);
         tr.append(td);
+            input = $('<input>');
+            input.attr({
+                type : 'hidden',
+                value : file['fullpath']
+            });
+            input.addClass("fullpath");
+        tr.append(input);
         table.append(tr);
-    });
+    });//files['files'].forEach(file => {
     $('#tabFiles').append(table);
+    addEvent();
 }
 
 $(function(){
@@ -84,6 +143,6 @@ $(function(){
         var dati = {};
         dati['azione'] = 'readdir';
         dati['path'] = $('#path').val();
-        fAjax('/readdir',dati);
+        fAjax('/readdir','POST',dati);
     });//$('#bOk').click(function(){
 });

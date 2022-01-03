@@ -1,7 +1,7 @@
 const fs = require('fs');
 const pt = require('path');
 
-class Dir{
+class MyDir{
     path;
     error;
 
@@ -67,14 +67,14 @@ class Dir{
                 //console.log(names);
             }//if(this.isDir()){
             else{
-                this.error = DIR_NOTADIR;
+                this.error = MyDir.DIR_NOTADIR;
             }
         }//if(this.esiste()){
         else{
-            this.error = DIR_NOTEXISTS;
+            this.error = MyDir.DIR_NOTEXISTS;
         }
         return names;
     }
 }
 
-module.exports = {Dir}
+module.exports = {MyDir}
