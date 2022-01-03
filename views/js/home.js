@@ -1,4 +1,5 @@
 
+//Call to Node server to use file functions
 function fAjax(url, dati){
     $.ajax({
         url: url,
@@ -7,6 +8,14 @@ function fAjax(url, dati){
         contentType : 'application/x-www-form-urlencoded',
         success : function(risp, stato, xhr){
             console.log(risp);
+            if(url == '/readdir'){
+                if(risp['error'] == 0){
+
+                }
+                else{
+                    alert("Errore durante la lettura della cartella. Codice "+risp['error']);
+                }
+            }
         },
         complete : function(xhr, stato){
 
@@ -15,6 +24,10 @@ function fAjax(url, dati){
             console.warn(errore);
         }
     });
+}
+
+function tab(files){
+
 }
 
 $(function(){

@@ -4,12 +4,15 @@
   "description": "File Manager with NodeJs server",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "nodemon index.js"
   },
   "author": "Stefano Puggion",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.1",
     "express": "^4.17.2"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.15"
   }
 }

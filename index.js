@@ -6,6 +6,9 @@ const bp = require('body-parser');
 var app = express();
 var jsonParser = bp.json();
 var urlParser = bp.urlencoded({extended: false});
+app.use(jsonParser);
+app.use(urlParser);
+
 
 
 function readFile(mf){
@@ -33,16 +36,17 @@ app.get("/js/home.js",(req,res) => {
 });
 
 //Lettura contenuto del percorso
-app.post('/readdir',urlParser,(req,res) => {
+app.post('/readdir',(req,res) => {
     //console.log(req.body);
     //res.send(req.body);
     var path = req.body.path;
     let folder = new dir.Dir(path);
     let names = folder.readDir();
-    res.send(names);
+    names['error'] = folder.getError();
+    res.json(names);
 });
 
 var port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log("Server in ascolto sulla porta "+port);
+    console.log("Server in ascolto all'indirizzo http://localhost:"+port);
 });

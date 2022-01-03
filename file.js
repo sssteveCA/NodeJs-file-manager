@@ -13,7 +13,7 @@ class MyFile{
         this.error = 0;
     }
 
-    //se il file specificato esiste
+    //if the specified file exists
     esiste(){
         var esiste = false;
         if(fs.existsSync(this.path)){
@@ -30,7 +30,7 @@ class MyFile{
         return this.percorso;
     }
 
-    //lettura di un file
+    //read a file
     readFile(){
         let fileContent = null;
         this.error = 0;
