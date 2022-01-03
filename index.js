@@ -47,16 +47,31 @@ app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
 });
 
-app.post('/deldir',(req,res) => {
+app.post('/delDir',(req,res) => {
 
 });
 
-app.post('/delfile',(req,res) => {
+app.post('/delFile',(req,res) => {
     console.log(req.body);
+    var pathD = req.body.path;
+    let fd = new file.MyFile(pathD);
+    let canc = fd.delFile();
+    let errno = fd.getError();
+    let risp = {};
+    risp['error'] = errno;
+    if(errno == 0){
+        risp['msg'] = "Il file è stato eliminato";
+        risp['path'] = path.dirname(pathD);
+    }
+    else if(errno == file.MyFile.FILE_NOTEXISTS)
+        risp['msg'] = "Il file che stai cercando non esiste";
+    else if(errno == file.MyFile.FILE_NOTAFILE)
+        risp['msg'] = "Il percorso specificato non appartiene ad un file";
+    res.send(risp);
 });
 
 //read a file
-app.get('/readfile',(req,res) => {
+app.get('/readFile',(req,res) => {
     console.log(req.query.path);
     var path = req.query.path;
     let fd = new file.MyFile(path);
@@ -73,7 +88,7 @@ app.get('/readfile',(req,res) => {
 });
 
 //Read a directory
-app.post('/readdir',(req,res) => {
+app.post('/readDir',(req,res) => {
     //console.log(req.body);
     //res.send(req.body);
     var path = req.body.path;
