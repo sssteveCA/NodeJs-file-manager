@@ -6,6 +6,7 @@ const moveD = '/moveDir';
 const moveF = '/moveFile';
 const readD = '/readDir';
 const readF = '/readFile';
+const unknown_error = 'Errore sconosciuto';
 const file = require('./file');
 const dir = require('./dir');
 const path = require('path');
@@ -83,14 +84,36 @@ app.post(copyF,(req,res) => {
             risp['msg'] = 'Il percorso di destinazione appartiene ad un \' altra risorsa';
             break;
         default:
-            risp['msg'] = 'Errore sconosciuto';
+            risp['msg'] = unknown_error;
             break;
     }//switch(errno){
     res.send(risp);
 });
 
 app.post(delD,(req,res) => {
-
+    console.log(req.body);
+    let pathD = req.body.path;
+    let folder = new dir.MyDir(pathD);
+    let canc = folder.delDir();
+    let errno = folder.getError();
+    let risp = {};
+    risp['error'] = errno;
+    switch(errno){
+        case 0:
+            risp['msg'] = 'La cartella è stata cancellata con successo';
+            risp['path'] = path.dirname(pathD);
+            break;
+        case dir.MyDir.DIR_NOTEXISTS:
+            risp['msg'] = 'La cartella specificata non esiste';
+            break;
+        case dir.MyDir.DIR_NOTADIR:
+            risp['msg'] = 'Il percorso specificato non appartiene ad una cartella';
+            break;
+        default:
+            risp['msg'] = unknown_error;
+            break;
+    }//switch(errno){
+    res.send(risp);
 });
 
 //delete a file

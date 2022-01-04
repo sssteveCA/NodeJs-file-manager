@@ -15,15 +15,19 @@ function addEvent(){
     $('.delete').on('click',function(){
         var info = getInfo($(this));
         dati = {};
-        if(info['type'] == 'FILE')
+        if(info['type'] == 'FILE'){
             dati['action'] = delF;
-        else
+            dati['title'] = 'Elimina file';
+            dati['html'] = 'Vuoi eliminare il file selezionato?';
+        }
+        else{
             dati['action'] = delD;
-        dati['path'] = info['path'];
-        dati['title'] = 'Elimina file';
-        dati['html'] = 'Vuoi eliminare il file selezionato?';
+            dati['title'] = 'Elimina cartella';
+            dati['html'] = 'Vuoi eliminare la cartella selezionata?';
+        }
         dati['bt1'] = 'Sì';
         dati['bt2'] = 'No';
+        dati['path'] = info['path'];  
         fDialog(dati);
     });//$('.delete').on('click',function(){
     $('.copy').on('click',function(){
