@@ -1,3 +1,11 @@
+const copyD = '/copyDir';
+const copyF = '/copyFile';
+const delD = '/delDir';
+const delF = '/delFile';
+const moveD = '/moveDir';
+const moveF = '/moveFile';
+const readD = '/readDir';
+const readF = '/readFile';
 const file = require('./file');
 const dir = require('./dir');
 const path = require('path');
@@ -51,11 +59,40 @@ app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
 });
 
-app.post('/delDir',(req,res) => {
+app.post(copyF,(req,res) => {
+    console.log(req.body);
+    let src = req.body.path;
+    let dest = req.body.dest;
+    let fd = new file.MyFile(src);
+    let copied = fd.copyFile(dest);
+    let errno = fd.getError();
+    let risp = {};
+    risp['error'] = errno;
+    switch(errno){
+        case 0:
+            risp['msg'] = 'Il file è stato copiato';
+            break;
+        case file.MyFile.FILE_NOTEXISTS:
+            risp['msg'] = 'Il file sorgente specificato non esiste';
+            break;
+        case file.MyFile.FILE_NOTAFILE:
+            risp['msg'] = 'Il percorso sorgente specificato non appartiene ad un file';
+            break;
+        case file.MyFile.FILE_DESTEXISTS:
+            risp['msg'] = 'Il percorso di destinazione appartiene ad un \' altra risorsa';
+            break;
+        default:
+            risp['msg'] = 'Errore sconosciuto';
+            break;
+    }//switch(errno){
+    res.send(risp);
+});
+
+app.post(delD,(req,res) => {
 
 });
 
-app.post('/delFile',(req,res) => {
+app.post(delF,(req,res) => {
     console.log(req.body);
     var pathD = req.body.path;
     let fd = new file.MyFile(pathD);
@@ -75,7 +112,7 @@ app.post('/delFile',(req,res) => {
 });
 
 //read a file
-app.get('/readFile',(req,res) => {
+app.get(readF,(req,res) => {
     console.log(req.query.path);
     var path = req.query.path;
     let fd = new file.MyFile(path);
@@ -92,7 +129,7 @@ app.get('/readFile',(req,res) => {
 });
 
 //Read a directory
-app.post('/readDir',(req,res) => {
+app.post(readD,(req,res) => {
     //console.log(req.body);
     //res.send(req.body);
     var path = req.body.path;

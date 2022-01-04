@@ -4,6 +4,8 @@ class MyFile{
 
     static FILE_NOTEXISTS = 1;
     static FILE_NOTAFILE = 2;
+    static FILE_DESTEXISTS = 100;
+    static FILE_DESTNOTAFILE = 101;
 
     path;
     error;
@@ -11,6 +13,28 @@ class MyFile{
     constructor(path){
         this.path = path;
         this.error = 0;
+    }
+
+    //copy the file to dest 
+    copyFile(dest){
+        var copy = false;
+        this.error = 0;
+        if(this.esiste()){
+            if(this.isFile()){
+                let fd_dest = new MyFile(dest);
+                if(!fd_dest.esiste()){
+                    fs.copyFileSync(this.path,dest);
+                    copy = true;
+                }//if(!fd_dest.esiste()){
+                else
+                    this.error = MyFile.FILE_DESTEXISTS;
+            }//if(this.isFile()){
+            else
+                this.error = MyFile.FILE_NOTAFILE;
+        }//if(this.esiste()){
+        else
+            this.error = MyFile.FILE_NOTEXISTS;
+        return copy;
     }
 
     //delete the file

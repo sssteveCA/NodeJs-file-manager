@@ -25,6 +25,7 @@ function fAjax(url, method, dati){
                 }
             }//if(url == '/readdir'){
             else if(url == delF){
+                //It's necessary reload the directory
                 alert(risp['msg']);
                 if(risp['error'] == 0){
                     var arg = {};
@@ -32,6 +33,10 @@ function fAjax(url, method, dati){
                     fAjax(readD,'POST',arg);
                 }
             }//else if(url == '/delfile'){
+            else if(url == copyF){
+                //It's not necessary reload the directory
+                alert(risp['msg']);
+            }
         },
         complete : function(xhr, stato){
 
@@ -55,6 +60,9 @@ function fDialog(dati){
                 click : function(){
                     var params = {};
                     params['path'] = dati['path'];
+                    if(dati['action'] == copyF || dati['action'] == moveF){
+                        params['dest'] = $('#dest').val();
+                    }
                     fAjax(dati['action'],'POST',params);
                     $(this).dialog("close");
                 }

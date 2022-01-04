@@ -13,9 +13,13 @@ function addEvent(){
 
     });
     $('.delete').on('click',function(){
+        var info = getInfo($(this));
         dati = {};
-        dati['action'] = delF;
-        dati['path'] = getInfo($(this))['path'];
+        if(info['type'] == 'FILE')
+            dati['action'] = delF;
+        else
+            dati['action'] = delD;
+        dati['path'] = info['path'];
         dati['title'] = 'Elimina file';
         dati['html'] = 'Vuoi eliminare il file selezionato?';
         dati['bt1'] = 'Sì';
@@ -23,9 +27,13 @@ function addEvent(){
         fDialog(dati);
     });//$('.delete').on('click',function(){
     $('.copy').on('click',function(){
+        var info = getInfo($(this));
         dati = {};
-        dati['action'] = copyF;
-        dati['path'] = getInfo($(this))['path'];
+        if(path['type'] == 'FILE')
+            dati['action'] = copyF;
+        else
+            dati['action'] = copyD;
+        dati['path'] = info['path'];
         dati['title'] = 'Copia file';
         dati['bt1'] = 'Copia';
         dati['bt2'] = 'Annulla';
@@ -67,24 +75,6 @@ function tab(files){
     var backFolder = new Array("../","CARTELLA","","APRI","","","");
     var classes = new Array("name","type","size","open","delete","copy","move");
     tr = $('<tr>');
-    /*for(var i in backFolder){
-        td = $('<td>');
-        if(i != 3){
-            if(i < 3){
-                td.addClass(classes[i]);
-            }
-            //testo diverso da apri
-            td.text(backFolder[i]);
-        }// if(i != 3){
-        else{
-                button = $('<button>');
-                button.attr('type','button');
-                button.addClass(classes[3]);
-                button.text(backFolder[3]);
-            td.append(button);
-        }
-        tr.append(td);
-    }//for(var i in backFolder){*/
         input = $('<input>');
         input.attr({
             type : 'hidden',
