@@ -46,10 +46,19 @@ class MyDir{
         if(this.esiste()){
             if(this.isDir()){
                 let objPath = this.path;
+                let parse = pt.parse(objPath);
                 var i = 0;
+                if(parse.root != objPath){
+                    names['files'][i] = {};
+                    names['files'][i]['name'] = "../";
+                    names['files'][i]['fullpath'] = pt.dirname(objPath);
+                    names['files'][i]['type'] = "CARTELLA";
+                    names['files'][i]['size'] = "";
+                }
+                i++;
                 fs.readdirSync(this.path).forEach(function(nome){
                     //concat the opened path to filename
-                    let fullpath = pt.resolve(objPath,nome);
+                    let fullpath = pt.join(objPath,nome);
                     names['files'][i] = {};
                     names['files'][i]['name'] = nome;
                     names['files'][i]['fullpath'] = fullpath;

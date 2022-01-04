@@ -43,6 +43,10 @@ app.get("/js/jQueryUI.js",(req,res) => {
     res.sendFile(path.resolve(__dirname,'node_modules/jquery-ui-dist/jquery-ui.min.js'));
 });
 
+app.get("/js/functions.js",(req,res) => {
+    res.sendFile(path.join(__dirname,'/views/js/functions.js'));
+});
+
 app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
 });
