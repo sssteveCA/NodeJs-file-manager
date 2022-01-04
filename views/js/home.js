@@ -24,7 +24,7 @@ function fAjax(url, method, dati){
                     alert("Errore durante la lettura della cartella. Codice "+risp['error']);
                 }
             }//if(url == '/readdir'){
-            else if(url == delF){
+            else if(url == delF || url == moveF){
                 //It's necessary reload the directory
                 alert(risp['msg']);
                 if(risp['error'] == 0){

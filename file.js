@@ -80,6 +80,28 @@ class MyFile{
         return this.path;
     }
 
+    //move a file to dest path
+    moveFile(dest){
+        let moved = false;
+        this.error = 0;
+        if(this.esiste()){
+            if(this.isFile()){
+                let fd_dest = new MyFile(dest);
+                if(!fd_dest.esiste()){
+                    fs.renameSync(this.path,dest);
+                    moved = true;
+                }//if(!fd_dest.esiste()){
+                else
+                    this.error = MyFile.FILE_DESTEXISTS; 
+            }
+            else
+                this.error = MyFile.FILE_NOTAFILE;
+        }//if(this.esiste()){
+        else
+            this.error = MyFile.FILE_NOTEXISTS;
+        return moved;
+    }
+
     //read a file
     readFile(){
         let fileContent = null;
@@ -90,7 +112,6 @@ class MyFile{
             }
             else
                 this.error = MyFile.FILE_NOTAFILE;
-
         }//if(this.esiste()){
         else
             this.error = MyFile.FILE_NOTEXISTS;

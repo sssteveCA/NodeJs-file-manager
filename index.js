@@ -59,6 +59,7 @@ app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
 });
 
+//copy a file
 app.post(copyF,(req,res) => {
     console.log(req.body);
     let src = req.body.path;
@@ -70,7 +71,7 @@ app.post(copyF,(req,res) => {
     risp['error'] = errno;
     switch(errno){
         case 0:
-            risp['msg'] = 'Il file è stato copiato';
+            risp['msg'] = 'Il file è stato copiato in '+dest;
             break;
         case file.MyFile.FILE_NOTEXISTS:
             risp['msg'] = 'Il file sorgente specificato non esiste';
@@ -92,9 +93,10 @@ app.post(delD,(req,res) => {
 
 });
 
+//delete a file
 app.post(delF,(req,res) => {
     console.log(req.body);
-    var pathD = req.body.path;
+    let pathD = req.body.path;
     let fd = new file.MyFile(pathD);
     let canc = fd.delFile();
     let errno = fd.getError();
@@ -108,6 +110,36 @@ app.post(delF,(req,res) => {
         risp['msg'] = "Il file che stai cercando non esiste";
     else if(errno == file.MyFile.FILE_NOTAFILE)
         risp['msg'] = "Il percorso specificato non appartiene ad un file";
+    res.send(risp);
+});
+
+//move a file
+app.post(moveF,(req,res) => {
+    console.log(req.body);
+    let src = req.body.path;
+    let dest = req.body.dest;
+    let fd = new file.MyFile(src);
+    let moved = fd.moveFile(dest);
+    let errno = fd.getError();
+    let risp = {};
+    risp['error'] = errno;
+    switch(errno){
+        case 0:
+            risp['msg'] = 'Il file è stato spostato in '+dest;
+            risp['path'] = path.dirname(src);
+            break;
+        case file.MyFile.FILE_NOTEXISTS:
+            risp['msg'] = 'Il file sorgente specificato non esiste';
+            break;
+        case file.MyFile.FILE_NOTAFILE:
+            risp['msg'] = 'Il percorso sorgente specificato non appartiene ad un file';
+            break;
+        case file.MyFile.FILE_DESTEXISTS:
+            risp['msg'] = 'Il percorso di destinazione appartiene ad un \' altra risorsa';
+            break;
+        default:
+            break;
+    }//switch(errno){
     res.send(risp);
 });
 

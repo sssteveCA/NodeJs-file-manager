@@ -44,6 +44,20 @@ function addEvent(){
     });
     $('.move').on('click',function(){
         var path = getInfo($(this));
+        var info = getInfo($(this));
+        dati = {};
+        if(path['type'] == 'FILE')
+            dati['action'] = moveF;
+        else
+            dati['action'] = moveD;
+        dati['path'] = info['path'];
+        dati['title'] = 'Sposta file';
+        dati['bt1'] = 'Sposta';
+        dati['bt2'] = 'Annulla';
+        dati['html'] = `
+<div>Inserisci il percorso di destinazione</div>
+<div><input type="text" id="dest" name="dest"></div>`;
+        fDialog(dati);
     });
 }
 
