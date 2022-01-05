@@ -9,16 +9,13 @@ const readF = '/readFile';
 
 //Call to Node server to use file functions
 function fAjax(url, method, dati){
-    console.log("fAjax url => "+url);
-    console.log("fAjax dati");
-    console.log(dati);
     $.ajax({
         url: url,
         method: method,
         data : dati,
         contentType : 'application/x-www-form-urlencoded',
         success : function(risp, stato, xhr){
-            console.log(risp);
+            //console.log(risp);
             if(url == readD){
                 //read dir action
                 if(risp['error'] == 0){

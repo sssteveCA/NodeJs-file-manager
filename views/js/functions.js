@@ -78,7 +78,7 @@ function getInfo(td){
     info['name'] = tr.find('.name').text();
     info['path'] = tr.find('.fullpath').val();
     info['type'] = tr.find('.type').text();
-    console.log(info);
+    //console.log(info);
     return info;
 }
 
@@ -92,6 +92,7 @@ function tab(files){
     tr = $('<tr>');
     for(var v of headers){
         th = $('<th>');
+        th.attr('scope','col');
         th.text(v);
         tr.append(th);
     }
@@ -127,28 +128,28 @@ function tab(files){
             td = $('<td>');
                 button = $('<button>');
                 button.attr('type','button');
-                button.addClass(classes[3]);
+                button.addClass(classes[3]+" btn btn-primary");
                 button.text("APRI");
             td.append(button);
         tr.append(td);
             td = $('<td>');
                 button = $('<button>');
                 button.attr('type','button');
-                button.addClass(classes[4]);
+                button.addClass(classes[4]+" btn btn-danger");
                 button.text("ELIMINA");
             td.append(button);
         tr.append(td);
         td = $('<td>');
                 button = $('<button>');
                 button.attr('type','button');
-                button.addClass(classes[5]);
+                button.addClass(classes[5]+" btn btn-secondary");
                 button.text("COPIA");
             td.append(button);
         tr.append(td);
         td = $('<td>');
                 button = $('<button>');
                 button.attr('type','button');
-                button.addClass(classes[6]);
+                button.addClass(classes[6]+" btn btn-secondary");
                 button.text("SPOSTA");
             td.append(button);
         tr.append(td);

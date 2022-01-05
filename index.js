@@ -49,7 +49,7 @@ app.get("/js/home.js",(req,res) => {
 
 //copy a directory
 app.post(copyD,(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     src = req.body.path;
     dest = req.body.dest;
     folder = new dir.MyDir(src);
@@ -79,7 +79,7 @@ app.post(copyD,(req,res) => {
 
 //copy a file
 app.post(copyF,(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     src = req.body.path;
     dest = req.body.dest;
     fd = new file.MyFile(src);
@@ -108,7 +108,7 @@ app.post(copyF,(req,res) => {
 });
 
 app.post(delD,(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     pathD = req.body.path;
     folder = new dir.MyDir(pathD);
     folder.delDir();
@@ -135,7 +135,7 @@ app.post(delD,(req,res) => {
 
 //delete a file
 app.post(delF,(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     pathD = req.body.path;
     fd = new file.MyFile(pathD);
     fd.delFile();
@@ -155,7 +155,7 @@ app.post(delF,(req,res) => {
 
 //move a directory
 app.post(moveD,(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     src = req.body.path;
     dest = req.body.dest;
     folder = new dir.MyDir(src);

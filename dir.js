@@ -24,7 +24,7 @@ class MyDir{
         this.error = 0;
         let newDest = ""; //new file or dir path destination
         let destDir = new MyDir(dest);
-        if(!destDir.esiste()){
+        if(!destDir.esiste()){//
             destDir.makeDir(); //create the directory if not exists
             let files = this.readDir();
             if(this.error == 0){
@@ -36,18 +36,18 @@ class MyDir{
                         if(type == 'CARTELLA'){
                             let child_dir = new MyDir(fullpath);
                             newDest = dest+pt.sep+name;
-                            console.log("ENTRO NELLA CARTELLA "+fullpath);
-                            console.log("CARTELLA DESTINAZIONE "+newDest);
+                            //console.log("ENTRO NELLA CARTELLA "+fullpath);
+                            //console.log("CARTELLA DESTINAZIONE "+newDest);
                             child_dir.copyDir(newDest);
                         }
                         else{
                             newDest = dest+pt.sep+name;
-                            console.log("COPIO LA RISORSA "+fullpath+" IN "+newDest);
+                            //console.log("COPIO LA RISORSA "+fullpath+" IN "+newDest);
                             let fileSrc = new MyFile(fullpath);
                             fileSrc.copyFile(newDest);
                             file_errno = fileSrc.getError();
                             if(file_errno != 0){
-                                console.log("Errore copia risorsa "+fileDel.getPath()+" codice "+file_errno);
+                                //console.log("Errore copia risorsa "+fileDel.getPath()+" codice "+file_errno);
                             } 
                         }
                     }//if(name != '../'){
@@ -75,26 +75,26 @@ class MyDir{
                 //if is not reference to parent directory
                 if(name != '../'){
                     if(type == 'CARTELLA'){
-                        console.log("ENTRO NELLA CARTELLA "+fullpath);
+                        //console.log("ENTRO NELLA CARTELLA "+fullpath);
                         let child_dir = new MyDir(fullpath);
                         let child_del = child_dir.delDir();
                         let child_error = child_dir.getError();
                         if(child_error != 0){
-                            console.log("Errore cancellazione cartella "+child_dir.getPath()+" codice "+child_error);
+                            //console.log("Errore cancellazione cartella "+child_dir.getPath()+" codice "+child_error);
                         }
                     }
                     else{
-                        console.log("CANCELLO LA RISORSA "+fullpath);
+                        //console.log("CANCELLO LA RISORSA "+fullpath);
                         let fileDel = new MyFile(fullpath);
                         fileDel.delFile();
                         file_errno = fileDel.getError();
                         if(file_errno != 0){
-                            console.log("Errore cancellazione risorsa "+fileDel.getPath()+" codice "+file_errno);
+                            //console.log("Errore cancellazione risorsa "+fileDel.getPath()+" codice "+file_errno);
                         }
                     }
                 }
             }//for(var n in files['files']){
-            console.log("CANCELLO LA CARTELLA "+this.path);
+            //console.log("CANCELLO LA CARTELLA "+this.path);
             fs.rmdirSync(this.path);
             del = true;
         }//if(this.errno == 0){
