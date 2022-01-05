@@ -9,6 +9,9 @@ const readF = '/readFile';
 
 //Call to Node server to use file functions
 function fAjax(url, method, dati){
+    console.log("fAjax url => "+url);
+    console.log("fAjax dati");
+    console.log(dati);
     $.ajax({
         url: url,
         method: method,
@@ -25,7 +28,8 @@ function fAjax(url, method, dati){
                 }
             }//if(url == '/readdir'){
             else if(url == delD || url == delF || url == moveF){
-                //It's necessary to reload the directory
+                /*If action is delete dir, delete file or move file
+                It's necessary to reload the directory*/
                 alert(risp['msg']);
                 if(risp['error'] == 0){
                     var arg = {};
@@ -33,8 +37,9 @@ function fAjax(url, method, dati){
                     fAjax(readD,'POST',arg);
                 }
             }//else if(url == '/delfile'){
-            else if(url == copyF){
-                //It's not necessary to reload the directory
+            else if(url == copyD || url == copyF){
+                /* If action is copy dir or copy file 
+                It's not necessary to reload the directory */
                 alert(risp['msg']);
             }
         },
@@ -60,7 +65,8 @@ function fDialog(dati){
                 click : function(){
                     var params = {};
                     params['path'] = dati['path'];
-                    if(dati['action'] == copyF || dati['action'] == moveF){
+                    if(dati['action'] == copyD ||dati['action'] == copyF || dati['action'] == moveF){
+                        //if action is copy directory, copy file or move file, I get the destination path
                         params['dest'] = $('#dest').val();
                     }
                     fAjax(dati['action'],'POST',params);

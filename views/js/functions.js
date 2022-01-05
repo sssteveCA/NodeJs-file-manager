@@ -25,8 +25,8 @@ function addEvent(){
             dati['title'] = 'Elimina cartella';
             dati['html'] = 'Vuoi eliminare la cartella selezionata?';
         }
-        dati['bt1'] = 'Sì';
-        dati['bt2'] = 'No';
+        dati['bt1'] = 'Sì'; //1st button of dialog
+        dati['bt2'] = 'No'; //2nd button of dialog
         dati['path'] = info['path'];  
         fDialog(dati);
     });//$('.delete').on('click',function(){
@@ -37,10 +37,10 @@ function addEvent(){
             dati['action'] = copyF;
         else
             dati['action'] = copyD;
-        dati['path'] = info['path'];
+        dati['path'] = info['path']; //source path
         dati['title'] = 'Copia file';
-        dati['bt1'] = 'Copia';
-        dati['bt2'] = 'Annulla';
+        dati['bt1'] = 'Copia'; //1st button of dialog
+        dati['bt2'] = 'Annulla'; //2nd button of dialog
         dati['html'] = `
 <div>Inserisci il percorso di destinazione</div>
 <div><input type="text" id="dest" name="dest"></div>`;
@@ -54,10 +54,10 @@ function addEvent(){
             dati['action'] = moveF;
         else
             dati['action'] = moveD;
-        dati['path'] = info['path'];
+        dati['path'] = info['path']; //source path
         dati['title'] = 'Sposta file';
-        dati['bt1'] = 'Sposta';
-        dati['bt2'] = 'Annulla';
+        dati['bt1'] = 'Sposta'; //1st button of dialog
+        dati['bt2'] = 'Annulla'; //2nd button of dialog
         dati['html'] = `
 <div>Inserisci il percorso di destinazione</div>
 <div><input type="text" id="dest" name="dest"></div>`;

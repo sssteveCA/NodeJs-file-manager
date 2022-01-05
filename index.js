@@ -7,6 +7,7 @@ const moveF = '/moveFile';
 const readD = '/readDir';
 const readF = '/readFile';
 const unknown_error = 'Errore sconosciuto';
+let pathD,src,dest,errno,fd,folder,risp;
 const file = require('./file');
 const dir = require('./dir');
 const path = require('path');
@@ -17,20 +18,6 @@ var jsonParser = bp.json();
 var urlParser = bp.urlencoded({extended: false});
 app.use(jsonParser);
 app.use(urlParser);
-
-
-
-function readFile(mf){
-    let risp = "";
-    let index = mf.readFile();
-    if(index != null){
-        risp = index;
-    }
-    else{
-        risp = "Errore durante la lettura del file. Codice: "+mf.getErrore();
-    }
-    return risp;
-}
 
 app.get("/",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/home.html'));
@@ -60,15 +47,45 @@ app.get("/js/home.js",(req,res) => {
     res.sendFile(path.join(__dirname,'/views/js/home.js'));
 });
 
+//copy a directory
+app.post(copyD,(req,res) => {
+    console.log(req.body);
+    src = req.body.path;
+    dest = req.body.dest;
+    folder = new dir.MyDir(src);
+    folder.copyDir(dest);
+    errno = folder.getError();
+    risp = {};
+    risp['error'] = errno;
+    switch(errno){
+        case 0:
+            risp['msg'] = 'La cartella è stata copiata in '+dest;
+            break;
+        case dir.MyDir.DIR_NOTEXISTS:
+            risp['msg'] = 'La cartella specificata non esiste';
+            break;
+        case dir.MyDir.DIR_NOTADIR:
+            risp['msg'] = 'Il percorso specificato non appartiene ad una cartella';
+            break;
+        case dir.MyDir.DIR_DESTEXISTS:
+            risp['msg'] = 'Il percorso specificato appartiene ad una risorsa esistente';
+            break;
+        default:
+            risp['msg'] = unknown_error;
+            break;
+    }
+    res.send(risp);
+});
+
 //copy a file
 app.post(copyF,(req,res) => {
     console.log(req.body);
-    let src = req.body.path;
-    let dest = req.body.dest;
-    let fd = new file.MyFile(src);
-    let copied = fd.copyFile(dest);
-    let errno = fd.getError();
-    let risp = {};
+    src = req.body.path;
+    dest = req.body.dest;
+    fd = new file.MyFile(src);
+    fd.copyFile(dest);
+    errno = fd.getError();
+    risp = {};
     risp['error'] = errno;
     switch(errno){
         case 0:
@@ -92,11 +109,11 @@ app.post(copyF,(req,res) => {
 
 app.post(delD,(req,res) => {
     console.log(req.body);
-    let pathD = req.body.path;
-    let folder = new dir.MyDir(pathD);
-    let canc = folder.delDir();
-    let errno = folder.getError();
-    let risp = {};
+    pathD = req.body.path;
+    folder = new dir.MyDir(pathD);
+    folder.delDir();
+    errno = folder.getError();
+    risp = {};
     risp['error'] = errno;
     switch(errno){
         case 0:
@@ -119,11 +136,11 @@ app.post(delD,(req,res) => {
 //delete a file
 app.post(delF,(req,res) => {
     console.log(req.body);
-    let pathD = req.body.path;
-    let fd = new file.MyFile(pathD);
-    let canc = fd.delFile();
-    let errno = fd.getError();
-    let risp = {};
+    pathD = req.body.path;
+    fd = new file.MyFile(pathD);
+    fd.delFile();
+    errno = fd.getError();
+    risp = {};
     risp['error'] = errno;
     if(errno == 0){
         risp['msg'] = "Il file è stato eliminato";
@@ -139,12 +156,12 @@ app.post(delF,(req,res) => {
 //move a file
 app.post(moveF,(req,res) => {
     console.log(req.body);
-    let src = req.body.path;
-    let dest = req.body.dest;
-    let fd = new file.MyFile(src);
-    let moved = fd.moveFile(dest);
-    let errno = fd.getError();
-    let risp = {};
+    src = req.body.path;
+    dest = req.body.dest;
+    fd = new file.MyFile(src);
+    fd.moveFile(dest);
+    errno = fd.getError();
+    risp = {};
     risp['error'] = errno;
     switch(errno){
         case 0:
@@ -169,11 +186,11 @@ app.post(moveF,(req,res) => {
 //read a file
 app.get(readF,(req,res) => {
     console.log(req.query.path);
-    var path = req.query.path;
-    let fd = new file.MyFile(path);
+    pathD = req.query.path;
+    let fd = new file.MyFile(pathD);
     let content = fd.readFile();
-    let errno = fd.getError();
-    let risp = "";
+    errno = fd.getError();
+    risp = "";
     if(errno == 0)
         risp = content;
     else if(errno == file.MyFile.FILE_NOTEXISTS)
@@ -187,8 +204,8 @@ app.get(readF,(req,res) => {
 app.post(readD,(req,res) => {
     //console.log(req.body);
     //res.send(req.body);
-    var path = req.body.path;
-    let folder = new dir.MyDir(path);
+    pathD = req.body.path;
+    let folder = new dir.MyDir(pathD);
     let names = folder.readDir();
     names['path'] = folder.getPath();
     names['error'] = folder.getError();

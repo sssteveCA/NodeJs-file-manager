@@ -20,42 +20,44 @@ class MyDir{
     copyDir(dest){
         let copy = false;
         this.error = 0;
-        let files = this.readDir();
-        let srcDir = ""; //next dir to scan for copy
         let newDest = ""; //new file or dir path destination
-        if(this.error = 0){
-            let destDir = new MyDir(dest);
-            if(!destDir.esiste()){
-                destDir.makeDir(); //create the directory if not exists
+        let destDir = new MyDir(dest);
+        if(!destDir.esiste()){
+            destDir.makeDir(); //create the directory if not exists
+            let files = this.readDir();
+            /*console.log("readDir files");
+            console.log(files);
+            console.log("this.error = "+this.error);*/
+            if(this.error == 0){
                 for(var n in files['files']){
                     var name = files['files'][n]['name'];
                     var fullpath = files['files'][n]['fullpath'];
+                    var type = files['files'][n]['type'];
                     if(name != '../'){
-                        if(fs.statSync(fullpath).isDirectory()){
+                        if(type == 'CARTELLA'){
                             let child_dir = new MyDir(fullpath);
                             newDest = dest+pt.sep+name;
-                            console.log("ENTRO NELA CARTELLA "+fullpath);
+                            console.log("ENTRO NELLA CARTELLA "+fullpath);
                             console.log("CARTELLA DESTINAZIONE "+newDest);
                             child_dir.copyDir(newDest);
                         }
                         else{
                             newDest = dest+pt.sep+name;
-                            console.log("COPIO LA RISORSA "+fullpath+" IN "+destFile);
-                            /* let fileSrc = new MyFile(fullpath);
-                            fileSrc.copyFile(destFile);
+                            console.log("COPIO LA RISORSA "+fullpath+" IN "+newDest);
+                            let fileSrc = new MyFile(fullpath);
+                            fileSrc.copyFile(newDest);
                             file_errno = fileSrc.getError();
                             if(file_errno != 0){
                                 console.log("Errore copia risorsa "+fileDel.getPath()+" codice "+file_errno);
-                            } */
-                            //fs.copyFileSync(fullpath)
+                            } 
                         }
                     }//if(name != '../'){
                 }//for(var i in files['files']){
-            }//if(!destDir.esiste()){
-            else{
-                this.error = MyDir.DIR_DESTEXISTS;
-            }
-        }//if(this.error = 0){
+            }//if(this.error == 0)
+        }//if(!destDir.esiste()){
+        else{
+            this.error = MyDir.DIR_DESTEXISTS;
+        }
         return copy;
     }
 
@@ -68,9 +70,10 @@ class MyDir{
             for(var n in files['files']){
                 var name = files['files'][n]['name'];
                 var fullpath = files['files'][n]['fullpath'];
+                var type = files['files'][n]['type'];
                 //if is not reference to parent directory
                 if(name != '../'){
-                    if(fs.statSync(fullpath).isDirectory()){
+                    if(type == 'CARTELLA'){
                         console.log("ENTRO NELLA CARTELLA "+fullpath);
                         let child_dir = new MyDir(fullpath);
                         let child_del = child_dir.delDir();
