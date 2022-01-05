@@ -58,6 +58,7 @@ class MyDir{
         else{
             this.error = MyDir.DIR_DESTEXISTS;
         }
+        console.log("MyDir copy error "+this.error);
         return copy;
     }
 

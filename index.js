@@ -157,7 +157,7 @@ app.post(delF,(req,res) => {
 app.post(moveD,(req,res) => {
     console.log(req.body);
     src = req.body.path;
-    dest = req.body.path;
+    dest = req.body.dest;
     folder = new dir.MyDir(src);
     folder.moveDir(dest);
     errno = folder.getError();
@@ -166,6 +166,7 @@ app.post(moveD,(req,res) => {
     switch(errno){
         case 0:
             risp['msg'] = 'La cartella è stata spostata in '+dest;
+            risp['path'] = path.dirname(src);
             break;
         case dir.MyDir.DIR_COPYERROR:
             risp['msg'] = 'Errore durante la copia della cartella';
