@@ -1,5 +1,7 @@
 const fs = require('fs');
 const pt = require('path');
+const { MyFile } = require('./file');
+let file_errno;
 
 class MyDir{
     path;
@@ -7,21 +9,66 @@ class MyDir{
 
     static DIR_NOTEXISTS = 1;
     static DIR_NOTADIR = 2;
+    static DIR_DESTEXISTS = 100;
 
     constructor(path){
         this.path = path;
         this.error = 0;
     }
 
+    //copy directory and its content to dest path
+    copyDir(dest){
+        let copy = false;
+        this.error = 0;
+        let files = this.readDir();
+        let srcDir = ""; //next dir to scan for copy
+        let newDest = ""; //new file or dir path destination
+        if(this.error = 0){
+            let destDir = new MyDir(dest);
+            if(!destDir.esiste()){
+                destDir.makeDir(); //create the directory if not exists
+                for(var n in files['files']){
+                    var name = files['files'][n]['name'];
+                    var fullpath = files['files'][n]['fullpath'];
+                    if(name != '../'){
+                        if(fs.statSync(fullpath).isDirectory()){
+                            let child_dir = new MyDir(fullpath);
+                            newDest = dest+pt.sep+name;
+                            console.log("ENTRO NELA CARTELLA "+fullpath);
+                            console.log("CARTELLA DESTINAZIONE "+newDest);
+                            child_dir.copyDir(newDest);
+                        }
+                        else{
+                            newDest = dest+pt.sep+name;
+                            console.log("COPIO LA RISORSA "+fullpath+" IN "+destFile);
+                            /* let fileSrc = new MyFile(fullpath);
+                            fileSrc.copyFile(destFile);
+                            file_errno = fileSrc.getError();
+                            if(file_errno != 0){
+                                console.log("Errore copia risorsa "+fileDel.getPath()+" codice "+file_errno);
+                            } */
+                            //fs.copyFileSync(fullpath)
+                        }
+                    }//if(name != '../'){
+                }//for(var i in files['files']){
+            }//if(!destDir.esiste()){
+            else{
+                this.error = MyDir.DIR_DESTEXISTS;
+            }
+        }//if(this.error = 0){
+        return copy;
+    }
+
     //delete directory and its content
     delDir(){
         let del = false;
-        this.errno = 0;
+        this.error = 0;
         let files = this.readDir();
-        if(this.errno == 0){
+        if(this.error == 0){
             for(var n in files['files']){
                 var name = files['files'][n]['name'];
                 var fullpath = files['files'][n]['fullpath'];
+                //if is not reference to parent directory
                 if(name != '../'){
                     if(fs.statSync(fullpath).isDirectory()){
                         console.log("ENTRO NELLA CARTELLA "+fullpath);
@@ -35,7 +82,12 @@ class MyDir{
                     }
                     else{
                         console.log("CANCELLO LA RISORSA "+fullpath);
-                        fs.unlinkSync(fullpath);
+                        let fileDel = new MyFile(fullpath);
+                        fileDel.delFile();
+                        file_errno = fileDel.getError();
+                        if(file_errno != 0){
+                            console.log("Errore cancellazione risorsa "+fileDel.getPath()+" codice "+file_errno);
+                        }
                     }
                 }
             }//for(var n in files['files']){
@@ -70,6 +122,13 @@ class MyDir{
 
     getPath(){
         return this.path;
+    }
+
+    //create the directory if not exists
+    makeDir(){
+        if(!this.esiste()){
+            fs.mkdirSync(this.path);
+        }
     }
 
     readDir(){
