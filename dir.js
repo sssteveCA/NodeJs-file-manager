@@ -9,6 +9,8 @@ class MyDir{
 
     static DIR_NOTEXISTS = 1;
     static DIR_NOTADIR = 2;
+    static DIR_COPYERROR = 3;
+    static DIR_DELERROR = 4;
     static DIR_DESTEXISTS = 100;
 
     constructor(path){
@@ -25,9 +27,6 @@ class MyDir{
         if(!destDir.esiste()){
             destDir.makeDir(); //create the directory if not exists
             let files = this.readDir();
-            /*console.log("readDir files");
-            console.log(files);
-            console.log("this.error = "+this.error);*/
             if(this.error == 0){
                 for(var n in files['files']){
                     var name = files['files'][n]['name'];
@@ -53,6 +52,7 @@ class MyDir{
                         }
                     }//if(name != '../'){
                 }//for(var i in files['files']){
+                copy = true;
             }//if(this.error == 0)
         }//if(!destDir.esiste()){
         else{
@@ -79,7 +79,6 @@ class MyDir{
                         let child_del = child_dir.delDir();
                         let child_error = child_dir.getError();
                         if(child_error != 0){
-                            this.error = child_error;
                             console.log("Errore cancellazione cartella "+child_dir.getPath()+" codice "+child_error);
                         }
                     }
@@ -132,6 +131,23 @@ class MyDir{
         if(!this.esiste()){
             fs.mkdirSync(this.path);
         }
+    }
+
+    //move the directory to dest folder
+    moveDir(dest){
+        let move = false;
+        this.error = 0;
+        let copied = this.copyDir(dest);
+        if(copied){
+            let deleted = this.delDir();
+            if(deleted)
+                move = true;
+            else
+                this.error = MyDir.DIR_DELERROR;
+        }
+        else
+            this.error = MyDir.DIR_COPYERROR;
+        return move;
     }
 
     readDir(){

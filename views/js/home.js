@@ -20,6 +20,7 @@ function fAjax(url, method, dati){
         success : function(risp, stato, xhr){
             console.log(risp);
             if(url == readD){
+                //read dir action
                 if(risp['error'] == 0){
                     tab(risp);
                 }
@@ -27,8 +28,8 @@ function fAjax(url, method, dati){
                     alert("Errore durante la lettura della cartella. Codice "+risp['error']);
                 }
             }//if(url == '/readdir'){
-            else if(url == delD || url == delF || url == moveF){
-                /*If action is delete dir, delete file or move file
+            else if(url == delD || url == delF || url == moveD || url == moveF){
+                /*If action is delete dir, delete file, move dir or move file
                 It's necessary to reload the directory*/
                 alert(risp['msg']);
                 if(risp['error'] == 0){
@@ -65,8 +66,8 @@ function fDialog(dati){
                 click : function(){
                     var params = {};
                     params['path'] = dati['path'];
-                    if(dati['action'] == copyD ||dati['action'] == copyF || dati['action'] == moveF){
-                        //if action is copy directory, copy file or move file, I get the destination path
+                    if(dati['action'] == copyD ||dati['action'] == copyF || dati['action'] == moveD || dati['action'] == moveF){
+                        //if action is copy directory, copy file,move dir or move file, I get the destination path
                         params['dest'] = $('#dest').val();
                     }
                     fAjax(dati['action'],'POST',params);

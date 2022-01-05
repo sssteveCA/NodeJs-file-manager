@@ -33,12 +33,15 @@ function addEvent(){
     $('.copy').on('click',function(){
         var info = getInfo($(this));
         dati = {};
-        if(path['type'] == 'FILE')
+        if(path['type'] == 'FILE'){
             dati['action'] = copyF;
-        else
+            dati['title'] = 'Copia file';
+        }
+        else{
             dati['action'] = copyD;
+            dati['title'] = 'Copia cartella';
+        }
         dati['path'] = info['path']; //source path
-        dati['title'] = 'Copia file';
         dati['bt1'] = 'Copia'; //1st button of dialog
         dati['bt2'] = 'Annulla'; //2nd button of dialog
         dati['html'] = `
@@ -50,12 +53,15 @@ function addEvent(){
         var path = getInfo($(this));
         var info = getInfo($(this));
         dati = {};
-        if(path['type'] == 'FILE')
+        if(path['type'] == 'FILE'){
             dati['action'] = moveF;
-        else
+            dati['title'] = 'Sposta file';
+        }
+        else{
             dati['action'] = moveD;
+            dati['title'] = 'Sposta cartella';
+        }
         dati['path'] = info['path']; //source path
-        dati['title'] = 'Sposta file';
         dati['bt1'] = 'Sposta'; //1st button of dialog
         dati['bt2'] = 'Annulla'; //2nd button of dialog
         dati['html'] = `

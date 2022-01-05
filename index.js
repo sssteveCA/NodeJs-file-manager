@@ -153,9 +153,36 @@ app.post(delF,(req,res) => {
     res.send(risp);
 });
 
+//move a directory
+app.post(moveD,(req,res) => {
+    console.log(req.body);
+    src = req.body.path;
+    dest = req.body.path;
+    folder = new dir.MyDir(src);
+    folder.moveDir(dest);
+    errno = folder.getError();
+    risp = {};
+    risp['error'] = errno;
+    switch(errno){
+        case 0:
+            risp['msg'] = 'La cartella è stata spostata in '+dest;
+            break;
+        case dir.MyDir.DIR_COPYERROR:
+            risp['msg'] = 'Errore durante la copia della cartella';
+            break;
+        case dir.MyDir.DIR_DELERROR:
+            risp['msg'] = 'Errore durante la cancellazione della cartella sorgente';
+            break;
+        default:
+            risp['msg'] = unknown_error;
+            break;
+    }
+    res.send(risp);
+});
+
 //move a file
 app.post(moveF,(req,res) => {
-    console.log(req.body);
+    //console.log(req.body);
     src = req.body.path;
     dest = req.body.dest;
     fd = new file.MyFile(src);
@@ -185,7 +212,7 @@ app.post(moveF,(req,res) => {
 
 //read a file
 app.get(readF,(req,res) => {
-    console.log(req.query.path);
+    //console.log(req.query.path);
     pathD = req.query.path;
     let fd = new file.MyFile(pathD);
     let content = fd.readFile();
